@@ -1,18 +1,18 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import ListView, TemplateView, DetailView, CreateView
+from django.views.generic import ListView, TemplateView, DetailView, CreateView, UpdateView, DeleteView
 from todolist.models import Task
 
 
 def task_list(request):
     tasks = Task.objects.all()
-    return render(request, 'base/task_list.html', {'tasks': tasks})
+    return render(request, 'todolist/task_list.html', {'tasks': tasks})
 
 
 class TaskDetail(DetailView):
     model = Task
-    template_name = "base/task_detail.html"
+    template_name = "todolist/task_detail.html"
     get_context_name = "task"
 
 
@@ -20,7 +20,23 @@ class TaskCreate(CreateView):
     model = Task
     fields = '__all__'
     success_url = reverse_lazy('tasks')
-    template_name = 'base/task_form.html'
+    template_name = 'todolist/task_form.html'
+
+
+class TaskUpdate(UpdateView):
+    model = Task
+    fields = "__all__"
+    success_url = reverse_lazy('tasks')
+    template_name = 'todolist/task_form.html'
+
+
+class TaskDelete(DeleteView):
+    model = Task
+    context_object_name = 'task'
+    success_url = reverse_lazy('tasks')
+
+
+
 
 
 """

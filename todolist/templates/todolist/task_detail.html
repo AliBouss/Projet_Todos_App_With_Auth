@@ -5,7 +5,10 @@
     <title>Details</title>
 </head>
 <body>
+<a href="{% url 'tasks' %}">Back</a>
+
 <h1>Detail des tasks</h1>
 <h2>Tasks : {{task}}</h2>
+<p>{{ task.description}}</p>
 </body>
 </html>
