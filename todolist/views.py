@@ -1,37 +1,41 @@
 from django.contrib.auth.views import LoginView
-from django.http import HttpResponse
-from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import ListView, TemplateView, DetailView, CreateView, UpdateView, DeleteView
-from todolist.models import Task
+from .models import Task
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
-def task_list(request):
-    tasks = Task.objects.all()
-    return render(request, 'todolist/task_list.html', {'tasks': tasks})
+class HomeView(TemplateView):
+    title = 'default'
+    template_name = 'todolist/home.html'
 
 
-class TaskDetail(DetailView):
+class TaskList(LoginRequiredMixin, ListView):
+    model = Task
+    context_object_name = 'tasks'
+
+
+class TaskDetail(LoginRequiredMixin, DetailView):
     model = Task
     template_name = "todolist/task_detail.html"
     get_context_name = "task"
 
 
-class TaskCreate(CreateView):
+class TaskCreate(LoginRequiredMixin, CreateView):
     model = Task
     fields = '__all__'
     success_url = reverse_lazy('tasks')
     template_name = 'todolist/task_form.html'
 
 
-class TaskUpdate(UpdateView):
+class TaskUpdate(LoginRequiredMixin, UpdateView):
     model = Task
     fields = "__all__"
     success_url = reverse_lazy('tasks')
     template_name = 'todolist/task_form.html'
 
 
-class TaskDelete(DeleteView):
+class TaskDelete(LoginRequiredMixin, DeleteView):
     model = Task
     context_object_name = 'task'
     success_url = reverse_lazy('tasks')
@@ -43,7 +47,9 @@ class CustomLoginView(LoginView):
     redirect_authenticated_user = True
 
     def get_success_url(self):
-        return reverse_lazy('tasks')
+        return reverse_lazy('home')
+
+
 
 
 
