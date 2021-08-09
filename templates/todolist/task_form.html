@@ -1,3 +1,6 @@
+{% extends 'todolist/main.html' %}
+
+{% block content %}
 <p><a href="{% url 'tasks' %}">Task List</a></p>
 
 <h1>Forms</h1>
@@ -7,3 +10,5 @@
   {{form.as_p}}
   <input type="submit" value="Submit">
 </form>
+
+{% endblock content %}
